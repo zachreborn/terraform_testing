@@ -1,22 +1,52 @@
-variable "ami" {
-  type = string
+variable "groups" {
+  type = set(string)
+  default = [
+    "admins",
+    "users",
+    "terraform"
+  ]
 }
 
-variable "instance_type" {
-  type    = string
-  default = "t3a.micro"
+variable "target_accounts" {
+  type = set(string)
+  default = [
+    "12",
+    "34",
+    "56",
+    "78"
+  ]
 }
 
-variable "disable_api_stop" {
-  type    = bool
-  default = false
-}
-
-variable "disable_api_termination" {
-  type    = bool
-  default = false
-  validation {
-    condition     = var.disable_api_termination == true || var.disable_api_termination == false
-    error_message = "The variable, disable_api_temrination must be either true or false."
+variable "group_ids" {
+  type = map(object({
+    display_name = string
+    description  = string
+    users        = optional(set(string))
+  }))
+  default = {
+    admins = {
+      display_name = "Admins"
+      description  = "Admins of the AWS account"
+      users = [
+        "user1",
+        "user2"
+      ]
+    }
+    users = {
+      display_name = "Users"
+      description  = "Users of the AWS account"
+      users = [
+        "user3",
+        "user4"
+      ]
+    }
+    terraform = {
+      display_name = "Terraform"
+      description  = "Terraform users of the AWS account"
+      users = [
+        "user5",
+        "user6"
+      ]
+    }
   }
 }
